@@ -1,10 +1,10 @@
-# Event Aggregator - Pub-Sub Log Aggregator
+# Pub-Sub Log Aggregator
 
-Sistem Event Aggregator dengan dukungan deduplication, idempotency, dan persistence untuk UTS Sistem Terdistribusi.
+Sistem Pub-Sub Log Aggregator dengan dukungan deduplication, idempotency, dan persistence untuk UTS Sistem Terdistribusi.
 
 ## 📋 Deskripsi
 
-Event Aggregator adalah sistem yang menerima event dari publisher, melakukan deduplication berdasarkan `(topic, event_id)`, dan menyimpan event unik ke database persisten. Sistem ini dirancang dengan pola Producer-Consumer menggunakan async queue untuk processing yang efisien.
+Pub-Sub Log Aggregator adalah sistem yang menerima event dari publisher, melakukan deduplication berdasarkan `(topic, event_id)`, dan menyimpan event unik ke database persisten. Sistem ini dirancang dengan pola Producer-Consumer menggunakan async queue untuk processing yang efisien.
 
 ### Fitur Utama:
 - **Deduplication:** Event duplikat otomatis ditolak
@@ -196,28 +196,6 @@ curl http://localhost:8080/health
 - **Async Queue:** Decoupling API response dari processing untuk throughput lebih baik
 - **Single Consumer Worker:** Cukup untuk demo scale, bisa di-scale dengan multiple workers untuk production
 - **Volume Mounting:** Database di-mount ke `./data` agar data persisten setelah restart
-
----
-
-## 📂 Struktur Project
-
-uts-aggregator/
-├── src/
-│ ├── init.py
-│ ├── main.py # FastAPI app + queue + consumer
-│ ├── models.py # Pydantic models
-│ └── dedup_store.py # SQLite dedup & event storage
-├── tests/
-│ └── test_aggregator.py # Unit tests
-├── data/ # SQLite database (volume-mounted)
-│ └── dedup_store.db
-├── publisher.py # Event publisher simulator
-├── Dockerfile # Aggregator container
-├── Dockerfile.publisher # Publisher container
-├── docker-compose.yml # Service orchestration
-├── requirements.txt # Python dependencies
-├── pytest.ini # Pytest configuration
-└── README.md # This file
 
 ---
 
