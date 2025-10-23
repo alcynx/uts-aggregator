@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  aggregator:
+    build: .
+    container_name: uts-aggregator
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./data:/app/data
+    environment:
+      - PYTHONUNBUFFERED=1
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8080/health')"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+
+  publisher:
+    build:
+      context: .
+      dockerfile: Dockerfile.publisher
+    container_name: uts-publisher
+    depends_on:
+      - aggregator
+    environment:
+      - AGGREGATOR_URL=http://aggregator:8080
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
